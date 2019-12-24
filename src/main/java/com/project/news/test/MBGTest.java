@@ -10,7 +10,10 @@ import org.mybatis.generator.config.xml.ConfigurationParser;
 import org.mybatis.generator.internal.DefaultShellCallback;
 
 public class MBGTest {
-	
+
+	/*
+		本主方法只能执行一次，如果执行多次的话就会生在mapper.xml中多次生成同样的内容
+	 */
 	public static void main(String[] args) throws Exception {
 		   List<String> warnings = new ArrayList<String>();
 		   boolean overwrite = true;
@@ -20,6 +23,7 @@ public class MBGTest {
 		   Configuration config = cp.parseConfiguration(configFile);
 		   DefaultShellCallback callback = new DefaultShellCallback(overwrite);
 		   MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, callback, warnings);
-		   myBatisGenerator.generate(null);		 
+		   myBatisGenerator.generate(null);
+
 	}
 }
