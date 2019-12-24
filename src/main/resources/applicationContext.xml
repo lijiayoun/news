@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+    <!-- Spring的配置文件，这里主要配置和业务逻辑有关的 -->
+    <!-- 数据源，事务控制 -->
+    <context:property-placeholder location="classpath:db.properties" />
+    <bean id="pooledDataSource"
+          class="org.apache.commons.dbcp2.BasicDataSource">
+        <property name="url" value="${jdbc.url}" />
+        <property name="driverClassName" value="${jdbc.driverClass}" />
+        <property name="username" value="${jdbc.user}" />
+        <property name="password" value="${jdbc.password}" />
+
+    </bean>
+
+    <!-- 配置和mybatis整合 -->
+    <bean id="sqlSessionFactory"
+          class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="configLocation"
+                  value="classpath:mybatis-config.xml" />
+        <property name="dataSource" ref="pooledDataSource" />
+        <property name="mapperLocations"
+                  value="classpath:mapper/*.xml" />
+    </bean>
+
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
+        <constructor-arg name="executorType" value="BATCH"></constructor-arg>
+
+    </bean>
+    <!-- 配置扫描器，将mybatis接口实现加入到ioc容器中 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- 扫描所有dao接口实现，加入到ioc容器中 -->
+        <property name="basePackage" value="com.project.news.dao" />
+    </bean>
+
+    <!-- 事务控制的配置 -->
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!-- 控制数据源 -->
+        <property name="dataSource" ref="pooledDataSource" />
+
+    </bean>
+</beans>
