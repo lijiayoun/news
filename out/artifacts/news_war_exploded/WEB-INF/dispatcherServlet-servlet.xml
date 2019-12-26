@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
+
+	<!--<context:component-scan base-package="com.project.news.controller"/>-->
+	<context:component-scan base-package="com.project.news" use-default-filters="false">
+		<!-- 只扫描控制器 -->
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+
+	</context:component-scan>
+	
+	<!-- 配置视图解析器，方便返回 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+		<property name="prefix" value="/WEB-INF/views/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+
+
+	<!-- 两个标准配置 -->
+	<!-- 将springmvc不能处理的请求交给Tomcat-->
+	<mvc:default-servlet-handler/>
+	<!-- 能支持springmvc更高级的一些功能 ，JSR303校验、快捷ajax请求...映射动态请求-->
+	<mvc:annotation-driven/>
+
+	<!--RequestMappingHandlerMapping会把Controller里面带有@RequestMapping注解的方法都加到一个容器里面，
+	然后RequestMappingHandlerAdapter根据里面的自定义配置可以对经过这些方法的请求的数据做一些额外的处理。
+	例如我想对带有@RequestMapping注解的方法的相应数据做一些处理，
+	比如方法返回的都是实体对象类型的数据，我想配置把这些实体对象转换成json串再返回给前端。  -->
+	<!--RequestMappingHandlerMapping，主要做的工作是将Contoller的带RequestMapping方法，添加到处理方法映射器和路径方法解决器中。-->
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
+	<!--RequestMappingHandlerAdapter主要是解决请求的，会话，请求头部处理，数据的绑定等，
+		然后从容器中，获取handlerMethod，处理业务逻辑，获取数据，并渲染视图，返回。 -->
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+					<property name="objectMapper">
+						<bean class="com.fasterxml.jackson.databind.ObjectMapper">
+							<property name="dateFormat">
+								<bean class="java.text.SimpleDateFormat">
+									<constructor-arg type="java.lang.String" value="yyyy-MM-dd HH:mm:ss"/>
+								</bean>
+							</property>
+						</bean>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+</beans>

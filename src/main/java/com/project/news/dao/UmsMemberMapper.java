@@ -3,6 +3,8 @@ package com.project.news.dao;
 import com.project.news.beans.UmsMember;
 import com.project.news.beans.UmsMemberExample;
 import java.util.List;
+
+import com.project.news.vo.AdminPo;
 import org.apache.ibatis.annotations.Param;
 
 public interface UmsMemberMapper {
@@ -18,7 +20,9 @@ public interface UmsMemberMapper {
 
     List<UmsMember> selectByExample(UmsMemberExample example);
 
-    UmsMember selectByPrimaryKey(Long id);
+    UmsMember selectByPrimaryKey(int id);
+
+    UmsMember selectByName(AdminPo adminPo);
 
     int updateByExampleSelective(@Param("record") UmsMember record, @Param("example") UmsMemberExample example);
 
@@ -27,4 +31,5 @@ public interface UmsMemberMapper {
     int updateByPrimaryKeySelective(UmsMember record);
 
     int updateByPrimaryKey(UmsMember record);
+
 }
