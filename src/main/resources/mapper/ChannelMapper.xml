@@ -98,17 +98,16 @@
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from channel
     where id = #{id,jdbcType=INTEGER}
-  </delete>
+    </delete>
     <delete id="deleteByExample" parameterType="com.project.news.beans.ChannelExample">
         delete from channel
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
-    <insert id="insert" parameterType="com.project.news.beans.Channel">
-    insert into channel (id, channelname)
-    values (#{id,jdbcType=INTEGER}, #{channelname,jdbcType=VARCHAR})
-  </insert>
+    <insert id="insert" parameterType="java.lang.String">
+      insert into channel values (null ,#{channelname,jdbcType=VARCHAR})
+    </insert>
     <insert id="insertSelective" parameterType="com.project.news.beans.Channel">
         insert into channel
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -134,6 +133,11 @@
             <include refid="Example_Where_Clause"/>
         </if>
     </select>
+
+    <select id="selectChannelIdByName" parameterType="String" resultType="int">
+      select id from channel where channelname=#{channelname,jdbcType=VARCHAR}
+    </select>
+
     <update id="updateByExampleSelective" parameterType="map">
         update channel
         <set>
@@ -165,11 +169,12 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
+
     <update id="updateByPrimaryKey" parameterType="com.project.news.beans.Channel">
-    update channel
-    set channelname = #{channelname,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+      update channel
+      set channelname = #{channelname,jdbcType=VARCHAR}
+      where id = #{id,jdbcType=INTEGER}
+    </update>
 
 
 </mapper>

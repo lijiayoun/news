@@ -41,6 +41,28 @@ public class UmsMember {
 
     private Integer historyIntegration;
 
+    private String email;
+
+    private Date loginTim;
+
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Date getLoginTim() {
+        return loginTim;
+    }
+
+    public void setLoginTim(Date loginTim) {
+        this.loginTim = loginTim;
+    }
+
+
     public Long getId() {
         return id;
     }

@@ -2,10 +2,9 @@ package com.project.news.controller;
 
 import com.project.news.beans.UmsMember;
 import com.project.news.service.UmsMemberService;
-import com.project.news.util.JsonResponse;
-import com.project.news.util.Token;
-import com.project.news.util.UmsInfo;
+import com.project.news.util.*;
 import com.project.news.vo.AdminPo;
+import com.project.news.vo.UserAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +25,7 @@ public class UmsMemberController {
     @RequestMapping("/user/login")
     public JsonResponse<Token> umsLogin(@RequestBody/*表明传入的是json数据*/ AdminPo adminPo) {
 
-        System.out.println("111111111");
         UmsMember umsMember = umsMemberService.queryAdminByName(adminPo);
-        System.out.println(umsMember.getNickname());
         if (umsMember != null) {
             JsonResponse<Token> jsonData = new JsonResponse<Token>();
             jsonData.setMessage("登陆成功！");
@@ -52,7 +49,6 @@ public class UmsMemberController {
     @ResponseBody
     @RequestMapping("/user/info")
     public JsonResponse<UmsInfo> umsInfo(@RequestHeader("authorization") /*将我们的请求头的值绑定到参数上*/String account) {
-        System.out.println(map.size()+"??");
         if (account != null) {
             for (Token token : map.keySet()) {
                 if (account.contains(token.getToken())) {
@@ -72,5 +68,42 @@ public class UmsMemberController {
             }
         }
         return null;
+    }
+
+    @CrossOrigin
+    @ResponseBody
+    @GetMapping("/profile/info/{username}")
+    public JsonResponse<UserAdmin> ShowUserDetail(@PathVariable("username")String username){
+
+        UmsMember umsMember=umsMemberService.queryUserByName(username);
+        UserAdmin userAdmin=new UserAdmin();
+        userAdmin.setId(umsMember.getId());
+        userAdmin.setIcon(umsMember.getIcon());
+        userAdmin.setUsername(umsMember.getEmail());
+        userAdmin.setEmail(umsMember.getEmail());
+        userAdmin.setNickName(umsMember.getNickname());
+        userAdmin.setNote(umsMember.getPersonalizedSignature());
+        userAdmin.setCreateTime(umsMember.getCreateTime());
+        userAdmin.setLoginTime(umsMember.getLoginTim());
+        userAdmin.setStatus(umsMember.getStatus());
+
+        JsonResponse<UserAdmin> jsonData=new JsonResponse<UserAdmin>();
+        jsonData.setMessage("成功");
+        jsonData.setData(userAdmin);
+        return jsonData;
+    }
+
+    @CrossOrigin
+    @ResponseBody
+    @PostMapping("/profile/update")
+    public JsonResponse<UserAdmin> ModifyUserInfo(@RequestBody UserAdmin userAdmin){
+        System.out.println("111111111");
+        umsMemberService.modifyUserInfo(userAdmin);
+
+        JsonResponse<UserAdmin> jsonData=new JsonResponse<UserAdmin>();
+        jsonData.setMessage("成功");
+        jsonData.setData(userAdmin);
+        System.out.println(userAdmin.getNickName());
+        return jsonData;
     }
 }

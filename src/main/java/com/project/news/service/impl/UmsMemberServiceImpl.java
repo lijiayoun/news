@@ -4,6 +4,7 @@ import com.project.news.beans.UmsMember;
 import com.project.news.dao.UmsMemberMapper;
 import com.project.news.service.UmsMemberService;
 import com.project.news.vo.AdminPo;
+import com.project.news.vo.UserAdmin;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -15,9 +16,19 @@ public class UmsMemberServiceImpl implements UmsMemberService {
     UmsMemberMapper umsMemberMapper;
 
     public UmsMember queryAdminByName(AdminPo adminPo) {
-        System.out.println("2222222");
 
         return umsMemberMapper.selectByName(adminPo);
+    }
+
+    public UmsMember queryUserByName(String username) {
+
+        return umsMemberMapper.selectUserByName(username);
+
+    }
+
+    public void modifyUserInfo(UserAdmin userAdmin) {
+        System.out.println("22222");
+        umsMemberMapper.updateUserInfoByName(userAdmin);
     }
 
 }

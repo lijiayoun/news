@@ -5,6 +5,7 @@ import com.project.news.beans.UmsMemberExample;
 import java.util.List;
 
 import com.project.news.vo.AdminPo;
+import com.project.news.vo.UserAdmin;
 import org.apache.ibatis.annotations.Param;
 
 public interface UmsMemberMapper {
@@ -24,12 +25,19 @@ public interface UmsMemberMapper {
 
     UmsMember selectByName(AdminPo adminPo);
 
+    UmsMember selectUserByName(String username);
+
+
+
     int updateByExampleSelective(@Param("record") UmsMember record, @Param("example") UmsMemberExample example);
 
     int updateByExample(@Param("record") UmsMember record, @Param("example") UmsMemberExample example);
 
     int updateByPrimaryKeySelective(UmsMember record);
 
+    void updateUserInfoByName(UserAdmin userAdmin);
+
     int updateByPrimaryKey(UmsMember record);
+
 
 }

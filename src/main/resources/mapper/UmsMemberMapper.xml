@@ -89,7 +89,11 @@
   <select id="selectByName" parameterType="AdminPo" resultType="com.project.news.beans.UmsMember">
     select *from ums_member where username=#{username} and password=#{password}
   </select>
-  
+
+  <select id="selectUserByName" parameterType="String" resultType="UmsMember">
+      select * from ums_member where username=#{username}
+  </select>
+
   <select id="selectByExample" parameterType="com.project.news.beans.UmsMemberExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -434,5 +438,8 @@
       luckey_count = #{luckeyCount,jdbcType=INTEGER},
       history_integration = #{historyIntegration,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateUserInfoByName" parameterType="com.project.news.vo.UserAdmin">
+    update ums_member set icon=#{icon},personalized_signature=#{note},nickname=#{nickName},status=#{status} where nickname=#{nickName}
   </update>
 </mapper>
