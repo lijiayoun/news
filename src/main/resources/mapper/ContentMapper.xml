@@ -10,6 +10,7 @@
     <result column="count" jdbcType="INTEGER" property="count" />
     <result column="cid" jdbcType="INTEGER" property="cid" />
   </resultMap>
+  
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -91,6 +92,19 @@
     from content
     where id = #{id,jdbcType=INTEGER}
   </select>
+
+  <select id="selectArticleList" parameterType="int" resultMap="BaseResultMap">
+    select * from content LIMIT #{limit}
+  </select>
+
+  <select id="selectArticleDetails" parameterType="int" resultType="com.project.news.util.ArticleDetails">
+    select  c.id,c.title,c.url,c.img,c.create_date,c.count,d.content_id,d.text from content c join details d  on c.id=d.content_id where c.id=#{contentId}
+
+  </select>
+  <select id="selectContentIdByUrl" parameterType="String" resultType="int">
+    select id from content where url=#{url}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from content
     where id = #{id,jdbcType=INTEGER}
@@ -158,6 +172,15 @@
       </if>
     </trim>
   </insert>
+ 
+  <insert id="insertArticle" parameterType="uploadArticle">
+    insert into  content values (null,#{title},#{url},#{img},#{createDate},#{count},#{cid})
+  </insert>
+  
+  <insert id="insertIntoDetailsText" parameterType="details" >
+    insert into details values (null,#{contentId},#{text})
+  </insert>
+  
   <select id="countByExample" parameterType="com.project.news.beans.ContentExample" resultType="java.lang.Long">
     select count(*) from content
     <if test="_parameter != null">

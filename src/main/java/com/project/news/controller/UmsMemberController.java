@@ -4,10 +4,12 @@ import com.project.news.beans.UmsMember;
 import com.project.news.service.UmsMemberService;
 import com.project.news.util.*;
 import com.project.news.vo.AdminPo;
+import com.project.news.vo.Password;
 import com.project.news.vo.UserAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +26,6 @@ public class UmsMemberController {
     @ResponseBody  /*将响应的数据转化为json类型*/
     @RequestMapping("/user/login")
     public JsonResponse<Token> umsLogin(@RequestBody/*表明传入的是json数据*/ AdminPo adminPo) {
-
         UmsMember umsMember = umsMemberService.queryAdminByName(adminPo);
         if (umsMember != null) {
             JsonResponse<Token> jsonData = new JsonResponse<Token>();
@@ -79,7 +80,7 @@ public class UmsMemberController {
         UserAdmin userAdmin=new UserAdmin();
         userAdmin.setId(umsMember.getId());
         userAdmin.setIcon(umsMember.getIcon());
-        userAdmin.setUsername(umsMember.getEmail());
+        userAdmin.setUsername(umsMember.getUsername());
         userAdmin.setEmail(umsMember.getEmail());
         userAdmin.setNickName(umsMember.getNickname());
         userAdmin.setNote(umsMember.getPersonalizedSignature());
@@ -96,7 +97,7 @@ public class UmsMemberController {
     @CrossOrigin
     @ResponseBody
     @PostMapping("/profile/update")
-    public JsonResponse<UserAdmin> ModifyUserInfo(@RequestBody UserAdmin userAdmin){
+    public JsonResponse<UserAdmin> modifyUserInfo(@RequestBody UserAdmin userAdmin){
         System.out.println("111111111");
         umsMemberService.modifyUserInfo(userAdmin);
 
@@ -106,4 +107,23 @@ public class UmsMemberController {
         System.out.println(userAdmin.getNickName());
         return jsonData;
     }
+
+    @CrossOrigin
+    @ResponseBody
+    @PostMapping("/profile/modify/password")
+    public JsonResponse modifyPassword(@RequestBody Password password){
+
+        System.out.println("111111");
+        umsMemberService.modifyPassowrd(password);
+        JsonResponse jsonData=new JsonResponse();
+        jsonData.setMessage("修改密码成功！");
+        jsonData.setData(null);
+        return jsonData;
+    }
+
+//    @PostMapping("/upload")
+//    public JsonResponse<Icon> uploadIcon(MultipartFile  multipartFile){
+//
+//        return null;
+//    }
 }

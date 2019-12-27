@@ -30,4 +30,6 @@ public class JsonResponse<T> {
     public void setData(T data) {
         this.data = data;
     }
+
+
 }

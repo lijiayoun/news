@@ -3,6 +3,7 @@ package com.project.news.service;
 
 import com.project.news.beans.UmsMember;
 import com.project.news.vo.AdminPo;
+import com.project.news.vo.Password;
 import com.project.news.vo.UserAdmin;
 
 public interface UmsMemberService  {
@@ -14,5 +15,5 @@ public interface UmsMemberService  {
 
     public void modifyUserInfo(UserAdmin userAdmin);
 
-
+    public void modifyPassowrd(Password password);
 }
