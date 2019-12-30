@@ -5,6 +5,7 @@ import com.project.news.beans.UmsMemberExample;
 import java.util.List;
 
 import com.project.news.vo.AdminPo;
+import com.project.news.vo.Icon;
 import com.project.news.vo.Password;
 import com.project.news.vo.UserAdmin;
 import org.apache.ibatis.annotations.Param;
@@ -42,5 +43,5 @@ public interface UmsMemberMapper {
 
     void updatePasswordByName(Password password);
 
-
+    void updateIconCodeByUsername(Icon icon);
 }

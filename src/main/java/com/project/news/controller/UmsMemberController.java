@@ -4,8 +4,11 @@ import com.project.news.beans.UmsMember;
 import com.project.news.service.UmsMemberService;
 import com.project.news.util.*;
 import com.project.news.vo.AdminPo;
+import com.project.news.vo.Icon;
 import com.project.news.vo.Password;
 import com.project.news.vo.UserAdmin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +20,7 @@ import java.util.Map;
 @Controller
 public class UmsMemberController {
 
+    private static Logger logger = LoggerFactory.getLogger(UmsMemberController.class);
     public static Map<Token, UmsMember> map = new HashMap<Token, UmsMember>();
 
     @Autowired
@@ -121,9 +125,30 @@ public class UmsMemberController {
         return jsonData;
     }
 
-//    @PostMapping("/upload")
-//    public JsonResponse<Icon> uploadIcon(MultipartFile  multipartFile){
-//
-//        return null;
-//    }
+    @CrossOrigin
+    @ResponseBody
+    @PostMapping("/upload")
+    public JsonResponse<Icon> uploadIcon(MultipartFile multipartFile){
+        System.out.println("1111");
+        System.out.println(multipartFile.getName());
+        String s=ImgUtil.uploadImg(multipartFile);
+        System.out.println(s);
+        Icon icon = new Icon();
+        icon.setPath(s);
+        JsonResponse<Icon> jsonData=new JsonResponse<Icon>();
+        jsonData.setMessage("成功");
+        jsonData.setData(icon);
+        return jsonData;
+    }
+
+    @CrossOrigin
+    @ResponseBody
+    @PostMapping("/profile/modify/icon")
+    public JsonResponse<Icon> uploadIconCode(@RequestBody Icon icon){
+        JsonResponse<Icon> jsonData=new JsonResponse<Icon>();
+        umsMemberService.uploadIconCode(icon);
+        jsonData.setMessage("成功");
+        jsonData.setData(icon);
+        return jsonData;
+    }
 }

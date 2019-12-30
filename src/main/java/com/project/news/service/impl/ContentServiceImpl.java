@@ -5,6 +5,8 @@ import com.project.news.beans.Details;
 import com.project.news.dao.ContentMapper;
 import com.project.news.service.ContentService;
 import com.project.news.util.ArticleDetails;
+import com.project.news.vo.ModifiedArticle;
+import com.project.news.vo.StartAndLimit;
 import com.project.news.vo.UploadArticle;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +19,11 @@ public class ContentServiceImpl implements ContentService {
     @Resource
     ContentMapper contentMapper;
 
-    public List<Content> showArticleList(int limit) {
+    public List<Content> showArticleList(int start,int limit) {
 
-        return contentMapper.selectArticleList(limit);
+        StartAndLimit sal=new StartAndLimit();
+        sal.setStart(start);sal.setLimit(limit);
+        return contentMapper.selectArticleList(sal);
     }
 
 
@@ -29,10 +33,10 @@ public class ContentServiceImpl implements ContentService {
     }
 
     public ArticleDetails addArticle(UploadArticle uploadArticle) {
-        System.out.println("22222");
+
         Details details=new Details();
         contentMapper.insertArticle(uploadArticle);
-        System.out.println("33333");
+
 
         int contentId=contentMapper.selectContentIdByUrl(uploadArticle.getUrl());
         System.out.println(contentId);
@@ -51,5 +55,14 @@ public class ContentServiceImpl implements ContentService {
         articleDetails.setContentId(contentId);
 
         return articleDetails;
+    }
+
+    public ArticleDetails modifyArticle(ModifiedArticle modifiedArticle) {
+        System.out.println(modifiedArticle.getTitle());
+        contentMapper.updateInfoByTitle(modifiedArticle);
+
+        int id=contentMapper.selectIdByTitle(modifiedArticle.getTitle());
+        System.out.println(id+" "+modifiedArticle.getTitle());
+        return null;
     }
 }

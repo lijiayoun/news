@@ -446,9 +446,12 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
     <update id="updateUserInfoByName" parameterType="com.project.news.vo.UserAdmin">
-    update ums_member set icon=#{icon},personalized_signature=#{note},nickname=#{nickName},status=#{status} where nickname=#{nickName}
+    update ums_member set icon=#{icon},email=#{email},personalized_signature=#{note},nickname=#{nickName},status=#{status} where nickname=#{nickName}
     </update>
     <update id="updatePasswordByName" parameterType="Password">
         update ums_member set password=${newPassword} where username=#{username}
+    </update>
+    <update id="updateIconCodeByUsername" parameterType="Icon">
+        update ums_member set icon=#{path} where username=#{username}
     </update>
 </mapper>

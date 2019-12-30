@@ -4,6 +4,7 @@ import com.project.news.beans.UmsMember;
 import com.project.news.dao.UmsMemberMapper;
 import com.project.news.service.UmsMemberService;
 import com.project.news.vo.AdminPo;
+import com.project.news.vo.Icon;
 import com.project.news.vo.Password;
 import com.project.news.vo.UserAdmin;
 import org.springframework.stereotype.Service;
@@ -37,9 +38,15 @@ public class UmsMemberServiceImpl implements UmsMemberService {
                            password.getUsername());
         System.out.println(umsMemberMapper.selectPasswordByName(password.getUsername()));
         if(password.getOldPassword().equals(umsMemberMapper.selectPasswordByName(password.getUsername()))){
-            System.out.println("00000");
             umsMemberMapper.updatePasswordByName(password);
         }
     }
+
+    @Override
+    public void uploadIconCode(Icon icon) {
+
+        umsMemberMapper.updateIconCodeByUsername(icon);
+    }
+
 
 }

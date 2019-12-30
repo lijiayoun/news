@@ -93,8 +93,8 @@
     where id = #{id,jdbcType=INTEGER}
   </select>
 
-  <select id="selectArticleList" parameterType="int" resultMap="BaseResultMap">
-    select * from content LIMIT #{limit}
+  <select id="selectArticleList" parameterType="StartAndLimit" resultMap="BaseResultMap">
+    select * from content LIMIT #{start},#{limit}
   </select>
 
   <select id="selectArticleDetails" parameterType="int" resultType="com.project.news.util.ArticleDetails">
@@ -187,6 +187,10 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
+  <select id="selectIdByTitle" parameterType="String" resultType="int">
+    select id from content where title=#{title}
+  </select>
+
   <update id="updateByExampleSelective" parameterType="map">
     update content
     <set>
@@ -262,5 +266,9 @@
       count = #{count,jdbcType=INTEGER},
       cid = #{cid,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateInfoByTitle" parameterType="ModifiedArticle">
+    update content set title=#{title},img=#{img} where title=#{title}
   </update>
 </mapper>

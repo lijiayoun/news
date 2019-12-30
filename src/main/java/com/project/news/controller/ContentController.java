@@ -4,6 +4,7 @@ import com.project.news.beans.Content;
 import com.project.news.service.ContentService;
 import com.project.news.util.ArticleDetails;
 import com.project.news.util.JsonResponse;
+import com.project.news.vo.ModifiedArticle;
 import com.project.news.vo.UploadArticle;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +23,18 @@ public class ContentController {
     @CrossOrigin
     @ResponseBody
     @GetMapping("/content")
-    public JsonResponse<List<Content>> showArticleList(@RequestParam int offset /*每页数据条数*/,@RequestParam int limit /*页码*/){
+    public JsonResponse<List<Content>> showArticleList(@RequestParam int offset /*页码*/,@RequestParam int limit /*每页数据条数*/){
+        System.out.println("offset:"+offset+" "+"limit:"+limit);
+        int start;
+        if(offset==0) {
+            start =0 ;
+        }
+        else {
+            start=(offset-1)*limit;
+        }
 
-        List<Content> list=contentService.showArticleList(limit);
+        System.out.println("start:"+start+" "+"limit:"+limit);
+        List<Content> list=contentService.showArticleList(start,limit);
         JsonResponse<List<Content>> jsonData=new JsonResponse<List<Content>>();
         jsonData.setMessage("成功");
         jsonData.setData(list);
@@ -44,7 +54,18 @@ public class ContentController {
         jsonData.setData(articleDetails);
         return jsonData;
     }
+    @CrossOrigin
+    @ResponseBody
+    @PutMapping("/content")
+    public JsonResponse<ArticleDetails> modifyArticle(@RequestBody ModifiedArticle modifiedArticle){
 
+        System.out.println(modifiedArticle.getTitle());
+
+        JsonResponse<ArticleDetails> jsonData=new JsonResponse<ArticleDetails>();
+        jsonData.setMessage("成功");
+        jsonData.setData(null);
+        return jsonData;
+    }
     @CrossOrigin
     @ResponseBody
     @PostMapping("/article/create")
@@ -63,11 +84,12 @@ public class ContentController {
         uploadArticle.setCreateDate(date);
         uploadArticle.setCid(7);
         ArticleDetails articleDetails=contentService.addArticle(uploadArticle);
-        System.out.println("4444444");
 
         JsonResponse<ArticleDetails> jsonData=new JsonResponse<ArticleDetails>();
         jsonData.setMessage("成功");
         jsonData.setData(articleDetails);
         return jsonData;
     }
+
+
 }
